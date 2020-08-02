@@ -6,7 +6,12 @@ const nodemailer = require("nodemailer");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const orders = await Order.find().lean();
+  try {
+    const orders = await Order.find().lean();
+    res.status(200).send(orders);
+  } catch (err) {
+    res.status(406).send(err);
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -32,13 +37,13 @@ router.post("/", async (req, res) => {
     <p>You have placed a new order</p>
     <h3>Invoice</h3>
     <ul>  
-      <li>Product: Product Name</li>
+      <li>Product: ${name}</li>
 
       
       <li>Quantity: ${req.body.quantity}</li>
+      <li>Total Price: ${price}</li>
+
     </ul>
-    // <h3>Message</h3>
-    // <p>${req.body.message}</p>
   `;
     let transporter = nodemailer.createTransport({
       host: "www.google.com",
@@ -75,7 +80,6 @@ router.post("/", async (req, res) => {
 
     res.status(200).send(order);
   } catch (err) {
-    console.log(err);
     res.status(406).send(err);
   }
 });
