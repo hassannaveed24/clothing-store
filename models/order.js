@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { productSchema } = require("../models/product");
 
 const Order = mongoose.model(
   "orders",
   new mongoose.Schema({
     product: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: productSchema,
       ref: "Product",
     },
     quantity: {
@@ -12,9 +13,6 @@ const Order = mongoose.model(
       default: 1,
     },
     totalPrice: {
-      type: Number,
-    },
-    discount: {
       type: Number,
     },
   })
